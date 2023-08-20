@@ -1,0 +1,146 @@
+import { ChangeEvent, useRef, useState } from "react";
+import { Button, ButtonGroup, HStack, Input } from "@chakra-ui/react";
+import DatePicker, { DateObject } from "react-multi-date-picker";
+import gregorian from "react-date-object/calendars/gregorian";
+import gregorian_en from "react-date-object/locales/gregorian_en";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import Icon from "react-multi-date-picker/components/icon";
+
+const CustomDatePicker = () => {
+  const [date, setDate] = useState<DateObject>(new DateObject());
+  const [clandertype, setClandertype] = useState<boolean>(true);
+  const [year, setYear] = useState<number | undefined>(undefined);
+  const [month, setMonth] = useState<number | undefined>(undefined);
+  const [day, setDay] = useState<number | undefined>(undefined);
+
+  const datePickerRef = useRef();
+  function handleChange(date: DateObject) {
+    date.convert(persian, persian_fa);
+    setDate(date);
+    setYear(date.year)
+    setMonth(date.month.number)
+    setDay(date.day)
+  }
+  function handleEvent(event: ChangeEvent<HTMLInputElement>, type: string) {
+    date.convert(persian, persian_fa);
+    const newValue: number | undefined =
+      +event.target.value == 0 ? undefined : +event.target.value;
+    switch (type) {
+      case "year":
+        setYear(newValue);
+        if (newValue !== undefined) date.setYear(newValue);
+        break;
+
+      case "month":
+        setMonth(newValue);
+        if (newValue !== undefined) date.setMonth(newValue);
+        break;
+
+      case "day":
+        setDay(newValue);
+        if (newValue !== undefined) date.setDay(newValue);
+        break;
+    }
+    setDate(date);
+  }
+  return (
+    <>
+      <HStack dir="ltr">
+        <DatePicker
+          render={<Icon />}
+          ref={datePickerRef}
+          plugins={[
+            <TimePicker position="bottom" hStep={1} mStep={1} sStep={1} />,
+          ]}
+          format="YYYY/MM/DD"
+          className="rmdp-prime"
+          showOtherDays
+          value={date}
+          onChange={handleChange}
+          calendar={clandertype ? gregorian : persian}
+          locale={clandertype ? gregorian_en : persian_fa}
+        >
+          <ButtonGroup variant="outline" spacing="1" mb={30}>
+            <Button
+              size={"sm"}
+              color={"teal"}
+              onClick={() => {
+                if (clandertype) setClandertype(!clandertype);
+                date?.convert(persian, persian_fa);
+              }}
+            >
+              شمسی
+            </Button>
+
+            <Button
+              size={"sm"}
+              color={"teal"}
+              onClick={() => {
+                if (!clandertype) setClandertype(!clandertype);
+              }}
+            >
+              میلادی
+            </Button>
+            <Button
+              size={"sm"}
+              color={"teal"}
+              onClick={() => {
+                handleChange(new DateObject());
+              }}
+            >
+              امروز
+            </Button>
+            <Button
+              size={"sm"}
+              color={"red"}
+              onClick={() => {
+                datePickerRef.current.closeCalendar();
+              }}
+            >
+              بستن
+            </Button>
+          </ButtonGroup>
+        </DatePicker>
+        <Input
+          value={year}
+          htmlSize={2}
+          width="auto"
+          placeholder="سال"
+          maxLength={4}
+          size="xs"
+          onChange={(event) => {
+            handleEvent(event, "year");
+          }}
+        ></Input>
+        <p>/</p>
+        <Input
+          value={month}
+          htmlSize={1}
+          width="auto"
+          placeholder="ماه"
+          maxLength={2}
+          size="xs"
+          onChange={(event) => {
+            handleEvent(event, "month");
+          }}
+        ></Input>
+        <p>/</p>
+        <Input
+          value={day}
+          htmlSize={1}
+          width="auto"
+          placeholder="روز"
+          maxLength={2}
+          size="xs"
+          onChange={(event) => {
+            handleEvent(event, "day");
+          }}
+        ></Input>
+      </HStack>
+    </>
+  );
+};
+
+export default CustomDatePicker;
