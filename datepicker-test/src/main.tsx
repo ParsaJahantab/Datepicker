@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import App from './App.tsx'
 import './index.css'
-import DatePickerTest from './components/DatePicker.tsx'
+import CustomTable from './components/Table.tsx'
+import CustomDualBoxList from './components/CustomDualBoxList.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ChakraProvider>
-    <DatePickerTest />
+    <CustomDualBoxList listOneOptions={["item1" , "item2" , "item3" , "item4" , "item1" , "item2" , "item3" , "item4" , "item1" , "item2" , "item3" , "item4"  ]} />
     </ChakraProvider>
   </React.StrictMode>,
 )

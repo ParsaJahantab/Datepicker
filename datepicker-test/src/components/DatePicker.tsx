@@ -13,21 +13,11 @@ import Icon from "react-multi-date-picker/components/icon"
 const DatePickerTest = () => {
   const [date, setDate] = useState<DateObject | null>(new Date);
   const [clandertype, setClandertype] = useState<boolean>(true);
-  const [year , setYear] = useState<number | undefined>(undefined);
-  const [month , setMonth] = useState<number | undefined>(undefined);
-  const [day , setDay] = useState<number | undefined>(undefined);
-  const [hour , setHour] = useState<number | undefined>(undefined);
-  const [minute , setMinute] = useState<number | undefined>(undefined);
-  const [second , setSecond] = useState<number | undefined>(undefined);
 
   const datePickerRef = useRef();
   function handleChange(date: DateObject) {
     date.convert(persian , persian_fa)
     setDate(date);
-    setYear(date.year)
-    setMonth(date.month.number)
-    setDay(date.day)
-    console.log(date.day);
   }
   return (
     <>
@@ -92,9 +82,9 @@ const DatePickerTest = () => {
           </Button>
         </ButtonGroup>
       </DatePicker>
-      <Input value={year} htmlSize={4} width='auto' placeholder="سال"maxLength={4}></Input>
-      <Input value={month}htmlSize={3} width='auto' placeholder="ماه"maxLength={2}></Input>
-      <Input value={day}htmlSize={3} width='auto' placeholder="روز" maxLength={2}></Input>
+      <Input value={date?.year} htmlSize={4} width='auto' placeholder="سال"maxLength={4}></Input>
+      <Input value={date?.month.number}htmlSize={3} width='auto' placeholder="ماه"maxLength={2}></Input>
+      <Input value={date?.day}htmlSize={3} width='auto' placeholder="روز" maxLength={2}></Input>
       </HStack>
     </>
   );
